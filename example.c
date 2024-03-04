@@ -2,79 +2,51 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define ARRAY_SIZE 1000000
+#define ROWS 5000
+#define COLS 2000
 
-int main(int argc, char *argv[]) {
-    // Create a large array
-    int *data = malloc(ARRAY_SIZE * sizeof(int));
-    if (data == NULL) {
+int main() {
+    
+    clock_t start = clock();
+    
+    // Allocate memory for the 2D arrays
+    int **array1 = malloc(ROWS * sizeof(int *));
+    int **array2 = malloc(ROWS * sizeof(int *));
+    if (array1 == NULL || array2 == NULL) {
+        printf("Memory allocation failed\n");
         return 1;
     }
 
-    clock_t start = clock();
-
-    // Access elements in a pattern that maximizes cache utilization
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        data[i] = i;
+    for (int i = 0; i < ROWS; i++) {
+        array1[i] = malloc(COLS * sizeof(int));
+        array2[i] = malloc(COLS * sizeof(int));
+        if (array1[i] == NULL || array2[i] == NULL) {
+            printf("Memory allocation failed\n");
+            return 1;
+        }
     }
 
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        data[i] = i+1;
+    // Interact the arrays with each other 555 times
+    for (int loop = 0; loop < 555; loop++) { // Repeat 555 times
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLS; j++) {
+                array1[i][j] = i + j + loop; // Sequential access
+                array2[j][i] = array1[i][j]; // Cache friendly access
+            }
+        }
     }
 
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        data[i] = i-1;
+
+    // Free the 2D arrays
+    for (int i = 0; i < ROWS; i++) {
+        free(array1[i]);
+        free(array2[i]);
     }
+    free(array1);
+    free(array2);
 
-    for (int j = 0; j < ARRAY_SIZE; j++) {
-        data[j] = ARRAY_SIZE - j;
-    }
-
-    //clock_t start = clock();
-
-    
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        
-	for (int k = 0; k < 10000; k++) {
-	// This is a dummy operation
-        int dummy = data[i] * i + k;
-	}
-    }
-
-    
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-       
-	for (int l = 0; l < 1000; l++) {
-	// This is a dummy operation
-        data[l] = data[i] * i - l;
-	}
-    }
-
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-       
-	for (int m = 2000; m < 4000; m++) {   
-	// This is a dummy operation
-        data[m] = data[i] * i + m;
-	}
-    }
-
-    for (int i = 0; i < ARRAY_SIZE; i++) {
-        
-	for (int n = 6000; n < 9000; n++) {
-	// This is a dummy operation
-        data[n] = data[i] * i - n;
-    	}
-    }
-
-    // Calculate the runtime
     double runtime = (double)(clock() - start) / CLOCKS_PER_SEC;
-
-    // Print the runtime
-    //printf("{ \"runtime\": %f seconds }\n", runtime);
     printf("{ \"runtime\": \"%f seconds\" }\n", runtime);
-
-    // Clean up
-    free(data);
 
     return 0;
 }
