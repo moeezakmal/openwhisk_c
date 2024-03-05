@@ -1,0 +1,30 @@
+{
+    "runtime": "22.063340 seconds"
+}
+{
+    "runtime": "21.545862 seconds"
+}
+{
+    "runtime": "21.406728 seconds"
+}
+{
+    "runtime": "21.372306 seconds"
+}
+{
+    "runtime": "21.162494 seconds"
+}
+{
+    "runtime": "20.961281 seconds"
+}
+{
+    "runtime": "20.771215 seconds"
+}
+{
+    "runtime": "20.418750 seconds"
+}
+{
+    "runtime": "19.987949 seconds"
+}
+{
+    "runtime": "19.726807 seconds"
+}
